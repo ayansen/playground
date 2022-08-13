@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
 }
 
+
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
@@ -21,6 +22,11 @@ dependencies {
 
     // Align versions of all Kotlin components
     implementation platform('org.jetbrains.kotlin:kotlin-bom')
+
+    // Align tests to junit5 of all Kotlin components
+    testImplementation ('org.junit.jupiter:junit-jupiter-api:5.9.0')
+    testImplementation ('org.junit.jupiter:junit-jupiter-engine:5.9.0')
+    testImplementation platform('org.jetbrains.kotlin:kotlin-test-junit5')
 }
 
 tasks.named('test') {
