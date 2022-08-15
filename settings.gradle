@@ -2,10 +2,8 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         mavenCentral()
-        jcenter()
-
     }
 }
 rootProject.name = 'playground'
 include('graphql')
-include('kafka-experiments')
+include('kafka')
