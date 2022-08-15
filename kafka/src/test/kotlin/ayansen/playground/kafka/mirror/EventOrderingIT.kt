@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ayansen.programming.kafka.experiments
+package ayansen.playground.kafka.mirror
 
-import ayansen.programming.avro.SampleEvent
-import ayansen.programming.kafka.experiments.Fixtures.generateSampleEvents
-import ayansen.programming.kafka.experiments.Fixtures.getConsumerProperties
-import ayansen.programming.kafka.experiments.Fixtures.getProducerProperties
+import ayansen.playground.avro.SampleEvent
+import ayansen.playground.kafka.IntegrationTestUtils
+import ayansen.playground.kafka.Fixtures.generateSampleEvents
+import ayansen.playground.kafka.Fixtures.getConsumerProperties
+import ayansen.playground.kafka.Fixtures.getProducerProperties
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 

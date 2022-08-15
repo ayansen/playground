@@ -1,4 +1,4 @@
-package ayansen.programming.kafka.experiments
+package ayansen.playground.kafka
 
 
 /**
@@ -87,7 +87,6 @@ object IntegrationTestUtils {
     /**
      * Wait until enough data (consumer records) has been consumed.
      *
-     * @param consumerConfig      Kafka Consumer configuration
      * @param topic               Kafka topic to consume from
      * @param expectedNumRecords  Minimum number of expected records
      * @param waitTime            Upper bound of waiting time in milliseconds

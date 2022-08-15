@@ -1,7 +1,7 @@
 .PHONY: build pr
 
 build:
-	gradle build
+	./gradlew build
 
 pr:
-	gradle jar
+	./gradlew jar

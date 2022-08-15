@@ -1,4 +1,4 @@
-@namespace("ayansen.programming.avro")
+@namespace("ayansen.playground.avro")
 protocol SampleEventProtocol {
   record SampleEvent {
     string id;

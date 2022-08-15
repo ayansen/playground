@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ayansen.programming.kafka.experiments
+package ayansen.playground.kafka
 
-import ayansen.programming.avro.SampleEvent
+import ayansen.playground.avro.SampleEvent
 import io.confluent.kafka.serializers.KafkaAvroDeserializer
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig
 import io.confluent.kafka.serializers.KafkaAvroSerializer
@@ -47,8 +47,8 @@ object Fixtures {
     fun getConsumerProperties(): Properties {
         val config = Properties()
         config[ConsumerConfig.GROUP_ID_CONFIG] = APP_GROUP_ID
-        config[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = Fixtures.KAFKA_BROKERS
-        config["schema.registry.url"] = Fixtures.SCHEMA_REGISTRY_URL
+        config[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = KAFKA_BROKERS
+        config["schema.registry.url"] = SCHEMA_REGISTRY_URL
         config[KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG] = true
         config[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "latest"
         config[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = "true"
@@ -59,8 +59,8 @@ object Fixtures {
 
     fun getProducerProperties(): Properties {
         val config = Properties()
-        config["bootstrap.servers"] = Fixtures.KAFKA_BROKERS
-        config["schema.registry.url"] = Fixtures.SCHEMA_REGISTRY_URL
+        config["bootstrap.servers"] = KAFKA_BROKERS
+        config["schema.registry.url"] = SCHEMA_REGISTRY_URL
         config["acks"] = "all"
         config[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         config[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = KafkaAvroSerializer::class.java
