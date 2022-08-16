@@ -11,13 +11,6 @@ spring:
   application:
     name: graphql-playground
 
-springdoc:
-  api-docs:
-    path: /internal/api-docs
-
-application:
-  version: ${DD_VERSION:local}
-
 info: # exposed via /actuator/info
   version: ${application.version}
 
@@ -47,3 +40,9 @@ server:
       - /actuator
       - /webjars
 
+graphql:
+  packages:
+    - "ayansen.playground.graphql.server.model"
+  subscriptions:
+    # Send a ka message every 1000 ms (1 second)
+    keepAliveInterval: 1000
