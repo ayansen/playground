@@ -1,0 +1,15 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'ayansen.playground.kotlin-common-conventions'
+    id 'org.springframework.boot' version '2.7.2'
+}
+
+dependencies {
+    implementation platform(SpringBootPlugin.BOM_COORDINATES)
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springdoc:springdoc-openapi-data-rest:1.7.0'
+    implementation 'org.springdoc:springdoc-openapi-ui:1.7.0'
+    implementation 'org.springdoc:springdoc-openapi-kotlin:1.7.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
