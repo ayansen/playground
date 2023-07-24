@@ -1,9 +1,9 @@
-name: make-pr
+name: build-master
 
 on:
-  pull_request:
+  push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
@@ -13,6 +13,4 @@ jobs:
         with:
           fetch-depth: 1
       - name: Run Makefile
-        env:
-          TOKEN: ${{ secrets.TOKEN }}
-        run: make pr
+        run: make build
