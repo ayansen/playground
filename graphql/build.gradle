@@ -1,17 +1,12 @@
-import org.springframework.boot.gradle.plugin.SpringBootPlugin
-
 plugins {
-    id 'ayansen.playground.kotlin-common-conventions'
-    id 'org.springframework.boot' version '2.7.2'
+    id 'ayansen.playground.kotlin-springboot-conventions'
     id 'com.expediagroup.graphql' version '6.1.0'
 }
-apply plugin: 'io.spring.dependency-management'
 
+apply plugin: 'io.spring.dependency-management'
 
 dependencies {
     implementation 'com.expediagroup:graphql-kotlin-spring-server:6.1.0'
-    implementation 'org.springframework.boot:spring-boot-starter'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 graphql {
