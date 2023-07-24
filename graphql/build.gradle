@@ -5,9 +5,10 @@ plugins {
     id 'org.springframework.boot' version '2.7.2'
     id 'com.expediagroup.graphql' version '6.1.0'
 }
+apply plugin: 'io.spring.dependency-management'
+
 
 dependencies {
-    implementation platform(SpringBootPlugin.BOM_COORDINATES)
     implementation 'com.expediagroup:graphql-kotlin-spring-server:6.1.0'
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
