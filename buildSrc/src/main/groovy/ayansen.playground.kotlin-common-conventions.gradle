@@ -15,6 +15,7 @@ dependencies {
 
     // Use the Kotlin JDK 8 standard library.
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.7.2'
 
     // Align tests to junit5 of all Kotlin components
     testImplementation ('org.junit.jupiter:junit-jupiter-api')
