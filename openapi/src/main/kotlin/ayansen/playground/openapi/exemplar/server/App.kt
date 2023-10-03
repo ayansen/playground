@@ -1,4 +1,4 @@
-package ayansen.playground.openapi.server
+package ayansen.playground.openapi.exemplar.server
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
