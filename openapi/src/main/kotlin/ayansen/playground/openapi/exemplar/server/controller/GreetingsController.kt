@@ -1,6 +1,5 @@
 package ayansen.playground.openapi.exemplar.server.controller
 
-import ayansen.playground.openapi.server.service.GreetingsService
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
