@@ -15,4 +15,4 @@ jobs:
       - name: Run Makefile
         env:
           TOKEN: ${{ secrets.TOKEN }}
-        run: make pr
+        run: make build
