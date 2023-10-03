@@ -1,5 +1,5 @@
 
-package ayansen.playground.openapi.server
+package ayansen.playground.openapi.exemplar.server
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

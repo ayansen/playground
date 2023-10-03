@@ -1,6 +1,6 @@
-package ayansen.playground.openapi.server
+package ayansen.playground.openapi.exemplar.server
 
-import ayansen.playground.openapi.server.service.GreetingsService
+import ayansen.playground.openapi.exemplar.server.service.GreetingsService
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 

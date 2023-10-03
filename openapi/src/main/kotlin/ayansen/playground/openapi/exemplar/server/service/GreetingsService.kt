@@ -1,4 +1,4 @@
-package ayansen.playground.openapi.server.service
+package ayansen.playground.openapi.exemplar.server.service
 
 class GreetingsService {
 
