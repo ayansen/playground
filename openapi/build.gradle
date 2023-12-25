@@ -5,7 +5,7 @@ plugins {
     id 'org.springdoc.openapi-gradle-plugin' version '1.6.0'
 }
 archivesBaseName = "openapi-exemplar"
-version = '1.0'
+version = '1.0.0'
 apply plugin: 'io.spring.dependency-management'
 
 
