@@ -1,0 +1,20 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
+plugins {
+    id 'ayansen.playground.kotlin-springboot-conventions'
+    id 'org.springdoc.openapi-gradle-plugin' version '1.6.0'
+}
+archivesBaseName = "envoy-control-plane"
+version = '1.0.0'
+apply plugin: 'io.spring.dependency-management'
+
+
+
+dependencies {
+    implementation 'io.envoyproxy.controlplane:java-control-plane:1.0.90'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.7.0'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springdoc:springdoc-openapi-kotlin:1.7.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
