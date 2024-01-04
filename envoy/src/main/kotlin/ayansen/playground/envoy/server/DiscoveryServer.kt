@@ -8,24 +8,25 @@ import org.slf4j.LoggerFactory
 /**
  * The EnvoyConfigurationServer class is responsible for starting a server that handles xDS (Discovery Service) requests from Envoy proxies. It uses a SimpleCache to store and retrieve configuration data.
  * Example Usage
-    val simpleCache = SimpleCache<Any>()
-    val server = EnvoyConfigurationServer(simpleCache)
-    server.start()
-    This code creates an instance of EnvoyConfigurationServer with a SimpleCache and starts the server. The server will listen for xDS requests on port 8000.
+val simpleCache = SimpleCache<Any>()
+val server = EnvoyConfigurationServer(simpleCache)
+server.start()
+This code creates an instance of EnvoyConfigurationServer with a SimpleCache and starts the server. The server will listen for xDS requests on port 8000.
 
 
  * Main functionalities
-    - The main functionalities of the EnvoyConfigurationServer class are:
-    - Starting a server to handle xDS requests
-    - Using a SimpleCache to store and retrieve configuration data
+- The main functionalities of the EnvoyConfigurationServer class are:
+- Starting a server to handle xDS requests
+- Using a SimpleCache to store and retrieve configuration data
  * @property simpleCache
  */
 
-class EnvoyConfigurationServer(private val simpleCache: SimpleCache<Any>) {
+class DiscoveryServer(private val simpleCache: SimpleCache<Any>) {
     companion object {
-        private val LOGGER = LoggerFactory.getLogger(EnvoyConfigurationServer::class.java)
+        private val LOGGER = LoggerFactory.getLogger(DiscoveryServer::class.java)
     }
-    fun start() {
+
+    init {
         val v3DiscoveryServer = V3DiscoveryServer(simpleCache)
         val builder = NettyServerBuilder.forPort(8000)
             .addService(v3DiscoveryServer.aggregatedDiscoveryServiceImpl)

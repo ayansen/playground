@@ -1,7 +1,8 @@
 package ayansen.playground.envoy
 
-import EnvoyConfigurationServer
-import ayansen.playground.envoy.repository.ConfigRepository
+import DiscoveryServer
+import ayansen.playground.envoy.provider.ConfigProvider
+import ayansen.playground.envoy.provider.FileConfigProvider
 import ayansen.playground.envoy.repository.FileConfigRepository
 import io.envoyproxy.controlplane.cache.v3.SimpleCache
 import org.springframework.context.annotation.Bean
@@ -11,12 +12,20 @@ import org.springframework.context.annotation.Configuration
 open class SpringConfiguration {
 
     @Bean
-    open fun cacheSetup(): SimpleCache<Any> = SimpleCache<Any> { "key" }
+    open fun setupCache(): SimpleCache<Any> = SimpleCache<Any> { "key" }
 
-    @Bean(initMethod = "init")
-    open fun setConfigProvider(simpleCache: SimpleCache<Any>): ConfigRepository = FileConfigRepository(simpleCache)
+    @Bean
+    open fun setupProviderConfigurations(): ProviderConfigurations {
+        return ProviderConfigurations()
+    }
 
-    @Bean(initMethod = "start")
-    open fun setupDiscoveryServer(simpleCache: SimpleCache<Any>): EnvoyConfigurationServer =
-        EnvoyConfigurationServer(simpleCache)
+    @Bean
+    open fun setupConfigProvider(simpleCache: SimpleCache<Any>, providerConfigurations: ProviderConfigurations): ConfigProvider = FileConfigProvider(simpleCache, providerConfigurations.file)
+
+    @Bean
+    open fun setupConfigRepository(configProvider: ConfigProvider, providerConfigurations: ProviderConfigurations): FileConfigRepository = FileConfigRepository(configProvider, providerConfigurations.file)
+
+    @Bean
+    open fun setupDiscoveryServer(simpleCache: SimpleCache<Any>): DiscoveryServer =
+        DiscoveryServer(simpleCache)
 }
