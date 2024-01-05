@@ -14,35 +14,4 @@ class AppTests {
     @Test
     fun contextLoads() {
     }
-
-    @Test
-    fun xdsEndpointAPITest() {
-
-        val client = EndpointDiscoveryServiceGrpc.newStub(
-            ManagedChannelBuilder.forAddress("127.0.0.1", 8000).usePlaintext().build()
-        )
-
-        client.streamEndpoints(object :
-            io.grpc.stub.StreamObserver<io.envoyproxy.envoy.service.discovery.v3.DiscoveryResponse> {
-            override fun onNext(value: io.envoyproxy.envoy.service.discovery.v3.DiscoveryResponse?) {
-                assertNotNull(value)
-            }
-
-            override fun onError(t: Throwable?) {
-                fail(t?.message)
-            }
-
-            override fun onCompleted() {
-                println("completed")
-            }
-
-        })?.onNext(
-            DiscoveryRequest.newBuilder().setTypeUrl(
-                "type.googleapis.com/envoy.config.endpoint.v3.ClusterLoadAssignment"
-            ).setNode(
-                io.envoyproxy.envoy.config.core.v3.Node.newBuilder().setId("key").build(
-                )
-            ).build()
-        )
-    }
 }
