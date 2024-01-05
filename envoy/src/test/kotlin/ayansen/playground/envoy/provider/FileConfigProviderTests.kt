@@ -1,7 +1,6 @@
-package ayansen.playground.envoy.repository
+package ayansen.playground.envoy.provider
 
 import ayansen.playground.envoy.FileProviderConfiguration
-import ayansen.playground.envoy.provider.FileConfigProvider
 import io.envoyproxy.controlplane.cache.v3.SimpleCache
 import org.junit.jupiter.api.Test
 import kotlin.test.assertNotNull
@@ -13,7 +12,7 @@ class FileConfigProviderTests {
     fun `test file config repository initialization`() {
         // Given
         val simpleCache = SimpleCache<Any> { "key" }
-        val fileConfigProvider = FileProviderConfiguration()
+        val fileConfigProvider = FileProviderConfiguration(path = "./configs")
         // When
         val fileConfigRepository = FileConfigProvider(simpleCache,fileConfigProvider)
 

@@ -1,5 +1,8 @@
 package ayansen.playground.envoy.provider
 
+import ayansen.playground.envoy.entity.Clusters
+import ayansen.playground.envoy.entity.Listeners
+import ayansen.playground.envoy.entity.Routes
 import io.envoyproxy.controlplane.cache.v3.SimpleCache
 import io.envoyproxy.controlplane.cache.v3.Snapshot
 import io.envoyproxy.envoy.config.cluster.v3.Cluster
@@ -14,10 +17,13 @@ abstract class ConfigProvider(private val simpleCache: SimpleCache<Any>) {
         private var version = 0
     }
 
-    protected abstract fun getListeners(): List<Listener>
-    protected abstract fun getClusters(): List<Cluster>
-    protected abstract fun getRoutes(): List<RouteConfiguration>
-    protected abstract fun getEndpoints(): List<ClusterLoadAssignment>
+    abstract fun getListeners(): List<Listener>
+    abstract fun getClusters(): List<Cluster>
+    abstract fun getRoutes(): List<RouteConfiguration>
+    abstract fun getEndpoints(): List<ClusterLoadAssignment>
+    abstract fun createOrUpdateListeners(listeners: Listeners): List<Listener>
+    abstract fun createOrUpdateClusters(clusters: List<Clusters>): List<Cluster>
+    abstract fun createOrUpdateRoutes(Routes: Routes): List<RouteConfiguration>
 
     fun updateCache() {
         simpleCache.setSnapshot(
