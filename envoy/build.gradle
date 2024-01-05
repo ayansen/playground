@@ -1,0 +1,18 @@
+
+plugins {
+    id 'ayansen.playground.kotlin-springboot-conventions'
+    id 'org.springdoc.openapi-gradle-plugin' version '1.6.0'
+}
+apply plugin: 'io.spring.dependency-management'
+
+
+
+dependencies {
+    implementation 'io.envoyproxy.controlplane:server:1.0.41'
+    implementation 'io.grpc:grpc-netty:1.60.1'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springdoc:springdoc-openapi-webflux-ui:1.7.0'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springdoc:springdoc-openapi-kotlin:1.7.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

@@ -1,0 +1,14 @@
+virtualHosts:
+- name: chained_envoy_hosts
+  domains: ["envoy.local"]
+  routes:
+  - match:
+      prefix: "/exemplar"
+    cluster: openapi-exemplar
+    mutations:
+      prefixRewrite: "/"
+  - match:
+      prefix: "/"
+    cluster: service_envoyproxy_io
+    mutations:
+      prefixRewrite: "/"
