@@ -6,6 +6,5 @@ pluginManagement {
 }
 rootProject.name = 'playground'
 include('graphql')
-include('kafka')
 include('openapi')
 include('envoy')
