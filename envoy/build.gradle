@@ -5,7 +5,8 @@ plugins {
 }
 apply plugin: 'io.spring.dependency-management'
 
-
+archivesBaseName = "envoy-control-plane"
+version = '1.0.0'
 
 dependencies {
     implementation 'io.envoyproxy.controlplane:server:1.0.41'
