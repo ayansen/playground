@@ -42,5 +42,5 @@ server:
 
 config-provider:
   file:
-    path: "/Users/ayansen/SrcCode/github/ayansen/playground/envoy/local_configurations"
+    path: "./configs"
 

@@ -1,6 +1,10 @@
 package ayansen.playground.envoy.entity
 
+import io.envoyproxy.envoy.config.core.v3.Address
 import io.envoyproxy.envoy.config.endpoint.v3.ClusterLoadAssignment
+import io.envoyproxy.envoy.config.endpoint.v3.Endpoint
+import io.envoyproxy.envoy.config.endpoint.v3.LbEndpoint
+import io.envoyproxy.envoy.config.endpoint.v3.LocalityLbEndpoints
 
 //kotlin class to deserialize clusters.yaml file  into a kotlin object
 data class Clusters(
@@ -22,17 +26,17 @@ data class Clusters(
     }
     fun toProtoEndpoints(): List<ClusterLoadAssignment> {
         return clusters.map {
-            io.envoyproxy.envoy.config.endpoint.v3.ClusterLoadAssignment.newBuilder()
+            ClusterLoadAssignment.newBuilder()
                 .setClusterName(it.name)
                 .addAllEndpoints(
                     (it.hosts.map { host ->
-                        io.envoyproxy.envoy.config.endpoint.v3.LocalityLbEndpoints.newBuilder()
+                        LocalityLbEndpoints.newBuilder()
                             .addLbEndpoints(
-                                io.envoyproxy.envoy.config.endpoint.v3.LbEndpoint.newBuilder()
+                                LbEndpoint.newBuilder()
                                     .setEndpoint(
-                                        io.envoyproxy.envoy.config.endpoint.v3.Endpoint.newBuilder()
+                                        Endpoint.newBuilder()
                                             .setAddress(
-                                                io.envoyproxy.envoy.config.core.v3.Address.newBuilder()
+                                                Address.newBuilder()
                                                     .setSocketAddress(
                                                         io.envoyproxy.envoy.config.core.v3.SocketAddress.newBuilder()
                                                             .setAddress(host.socketAddress.address)
