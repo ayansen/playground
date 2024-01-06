@@ -8,7 +8,15 @@ This module runs programs where I try out different aspects of graphql.
 
 
 ## Kafka
-This module runs programs where I try out different kafka and kstream applications. You can find out more [here](kafka/README.md)
+This module runs programs where I try out different kafka and kstream applications. 
+
+
+## Envoy Control Plane
+This module runs programs where I try out different aspects of envoy control plane which can configure envoy.
+
+
+## Open API Exemplar
+This module runs programs where I try out different aspects of building an openapi app using spring-boot.
 
 ## Build
 The kafka code uses [docker-compose](./kafka/docker-compose.yml) to spin up  kafka and its dependencies and then runs the integration tests on them to experiment the features.

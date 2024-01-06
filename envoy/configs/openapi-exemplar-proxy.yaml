@@ -1,0 +1,31 @@
+name: chained_envoy_hosts
+domains:
+  - "envoy.local"
+routes:
+  - match:
+      prefix: "/exemplar"
+    cluster:
+      name: openapi-exemplar
+      connectTimeout: 30
+      type: LOGICAL_DNS
+      lbPolicy: ROUND_ROBIN
+      hosts:
+      - socketAddress:
+          address: openapi-exemplar.default.svc
+          port: 80
+
+    mutations:
+      prefixRewrite: "/"
+  - match:
+      prefix: "/"
+    cluster:
+      name: service_envoyproxy_io
+      connectTimeout: 30
+      type: LOGICAL_DNS
+      lbPolicy: ROUND_ROBIN
+      hosts:
+      - socketAddress:
+          address: www.envoyproxy.io
+          port: 443
+    mutations:
+      prefixRewrite: "/"
