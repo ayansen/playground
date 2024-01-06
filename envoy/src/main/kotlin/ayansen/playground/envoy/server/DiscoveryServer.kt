@@ -6,21 +6,19 @@ import org.slf4j.LoggerFactory
 
 
 /**
- * The EnvoyConfigurationServer class is responsible for starting a server that handles xDS (Discovery Service) requests from Envoy proxies. It uses a SimpleCache to store and retrieve configuration data.
- * Example Usage
+ * TODOThe DiscoveryServer class is responsible for starting a gRPC server and initializing the necessary services for Envoy proxy configuration discovery.
+Example Usage
 val simpleCache = SimpleCache<Any>()
-val server = EnvoyConfigurationServer(simpleCache)
-server.start()
-This code creates an instance of EnvoyConfigurationServer with a SimpleCache and starts the server. The server will listen for xDS requests on port 8000.
-
-
- * Main functionalities
-- The main functionalities of the EnvoyConfigurationServer class are:
-- Starting a server to handle xDS requests
-- Using a SimpleCache to store and retrieve configuration data
+val discoveryServer = DiscoveryServer(simpleCache)
+The code above creates an instance of SimpleCache and passes it to the DiscoveryServer constructor. It then starts the gRPC server and initializes the necessary services for Envoy proxy configuration discovery.
+Code Analysis
+Main functionalities
+The main functionalities of the DiscoveryServer class are:
+Starting a gRPC server on a specified port.
+Initializing the services for aggregated discovery, cluster discovery, endpoint discovery, listener discovery, and route discovery.
+ *
  * @property simpleCache
  */
-
 class DiscoveryServer(private val simpleCache: SimpleCache<Any>) {
     companion object {
         private val LOGGER = LoggerFactory.getLogger(DiscoveryServer::class.java)

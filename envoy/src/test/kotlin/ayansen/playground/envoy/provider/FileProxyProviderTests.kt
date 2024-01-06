@@ -1,20 +1,20 @@
 package ayansen.playground.envoy.provider
 
-import ayansen.playground.envoy.FileProviderConfiguration
+import ayansen.playground.envoy.entity.ListenersConfiguration
 import io.envoyproxy.controlplane.cache.v3.SimpleCache
 import org.junit.jupiter.api.Test
 import kotlin.test.assertNotNull
 
-class FileConfigProviderTests {
+class FileProxyProviderTests {
 
     // FileConfigRepository initializes successfully with a SimpleCache instance
     @Test
     fun `test file config repository initialization`() {
         // Given
         val simpleCache = SimpleCache<Any> { "key" }
-        val fileConfigProvider = FileProviderConfiguration(path = "./configs")
+        val listenersConfiguration = ListenersConfiguration(emptyList())
         // When
-        val fileConfigRepository = FileConfigProvider(simpleCache,fileConfigProvider)
+        val fileConfigRepository = FileProxyProvider("./configs", simpleCache,listenersConfiguration)
 
         // Then
         assertNotNull(fileConfigRepository)
