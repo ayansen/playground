@@ -44,13 +44,15 @@ spec:
             httpGet:
               path: /actuator/health/
               port: {{ .Values.service.targetPort }}
-            timeoutSeconds: 5
+            periodSeconds: 60
+            timeoutSeconds: 30
           readinessProbe:
             failureThreshold: 10
+            periodSeconds: 60
+            timeoutSeconds: 30
             httpGet:
               path: /actuator/health/
               port: {{ .Values.service.targetPort }}
-            timeoutSeconds: 5
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}

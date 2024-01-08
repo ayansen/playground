@@ -7,4 +7,4 @@ COPY configs build/configs/
 
 WORKDIR /app/build
 ENTRYPOINT java -jar ${APP_NAME}-${APP_VERSION}.jar ${SPRING_ARGS}
-EXPOSE 8080
+EXPOSE 8080 8000
