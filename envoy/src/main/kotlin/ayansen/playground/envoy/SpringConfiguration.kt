@@ -2,6 +2,7 @@ package ayansen.playground.envoy
 
 import DiscoveryServer
 import ayansen.playground.envoy.entity.ListenersConfiguration
+import ayansen.playground.envoy.entity.ProxyProviderConfigurations
 import ayansen.playground.envoy.provider.ProxyProvider
 import ayansen.playground.envoy.provider.FileProxyProvider
 import io.envoyproxy.controlplane.cache.v3.SimpleCache

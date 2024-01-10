@@ -1,6 +1,6 @@
 name: chained_envoy_hosts
 domains:
-  - "envoy.local:8080"
+  - "envoy.local"
 routes:
   - match:
       prefix: "/exemplar"
@@ -13,7 +13,6 @@ routes:
       - socketAddress:
           address: openapi-exemplar.default.svc
           port: 80
-          protocol: HTTP
 
     mutations:
       prefixRewrite: "/"
@@ -28,6 +27,5 @@ routes:
       - socketAddress:
           address: www.envoyproxy.io
           port: 443
-          protocol: HTTPS
     mutations:
       prefixRewrite: "/"
