@@ -16,6 +16,7 @@
 package ayansen.playground.kafka.mirror
 
 import ayansen.playground.avro.SampleEvent
+import ayansen.playground.kafka.Fixtures.createTopics
 import ayansen.playground.kafka.IntegrationTestUtils
 import ayansen.playground.kafka.Fixtures.generateSampleEvents
 import ayansen.playground.kafka.Fixtures.getConsumerProperties
@@ -39,6 +40,7 @@ class EventOrderingIT {
      */
     @Test
     fun `test ordering of events for a particular partition assigned based on record key`() {
+        createTopics(listOf(appConsumerTopic, appProducerTopic))
         val firstSample = generateSampleEvents(10, "firstSample")
         val secondSample = generateSampleEvents(10, "secondSample")
         kafkaMirror.processRecords(500, 2)

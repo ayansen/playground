@@ -41,6 +41,26 @@ import kotlin.test.assertEquals
  */
 object IntegrationTestUtils {
 
+    /**
+     * Produce the given list of records, waiting for up to `maxWaitMs` for the writes
+     * to complete.
+     *
+     * @param eos                 Whether or not the producer should use EOS
+     * @param topic               Kafka topic to produce to
+     * @param partition           Kafka partition to produce to
+     * @param toProduce           List of records to produce
+     * @param maxWaitMs           Maximum amount of time to wait for the writes to complete (ms)
+     * @param <V>                 Value type of the data records
+     * @param <K>                 Key type of the data records
+     * @return The list of records that were produced
+     * @throws Exception for any Kafka-related failures
+     * @throws AssertionError if the expected number of records were not produced
+     * within the timeout period
+     * @see .produceSynchronously
+     * @see .waitUntilMinRecordsReceived
+     * @see .readRecords
+     **/
+
     fun <V, K> produceSynchronously(
         eos: Boolean,
         topic: String,
@@ -145,8 +165,8 @@ object IntegrationTestUtils {
 
     private fun <K, V> getTestProducer(): KafkaProducer<K, V> {
         val config = Properties()
-        config["bootstrap.servers"] = Fixtures.KAFKA_BROKERS
-        config["schema.registry.url"] = Fixtures.SCHEMA_REGISTRY_URL
+        config["bootstrap.servers"] = Fixtures.kafkaContainer.bootstrapServers
+        config["schema.registry.url"] = Fixtures.schemaRegistryContainer.schemaRegistryUrl()
         config["acks"] = "all"
         config[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         config[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = KafkaAvroSerializer::class.java
@@ -157,8 +177,8 @@ object IntegrationTestUtils {
         val config = Properties()
         config[ConsumerConfig.CLIENT_ID_CONFIG] = "integration-test-consumer-${(0..100).random()}"
         config[ConsumerConfig.GROUP_ID_CONFIG] = "integration-test-consumers-${(0..100).random()}"
-        config[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = Fixtures.KAFKA_BROKERS
-        config["schema.registry.url"] = Fixtures.SCHEMA_REGISTRY_URL
+        config[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = Fixtures.kafkaContainer.bootstrapServers
+        config["schema.registry.url"] = Fixtures.schemaRegistryContainer.schemaRegistryUrl()
         config[KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG] = true
         config[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "latest"
         config[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = "true"
@@ -166,4 +186,7 @@ object IntegrationTestUtils {
         config[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = KafkaAvroDeserializer::class.java
         return KafkaConsumer(config)
     }
+
+
+
 }

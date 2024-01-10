@@ -19,10 +19,16 @@ import ayansen.playground.avro.SampleEvent
 import io.confluent.kafka.serializers.KafkaAvroDeserializer
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig
 import io.confluent.kafka.serializers.KafkaAvroSerializer
+import org.apache.kafka.clients.CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG
+import org.apache.kafka.clients.admin.AdminClient
+import org.apache.kafka.clients.admin.NewTopic
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
+import org.testcontainers.containers.KafkaContainer
+import org.testcontainers.containers.Network
+import org.testcontainers.utility.DockerImageName
 import java.util.*
 
 data class KeyValueTimestamp<T, U>(val key: T, val value: U, val timestamp: Long)
@@ -30,9 +36,22 @@ data class KeyValueTimestamp<T, U>(val key: T, val value: U, val timestamp: Long
 
 object Fixtures {
 
-    const val KAFKA_BROKERS = "localhost:19092"
-    const val SCHEMA_REGISTRY_URL = "http://localhost:8083"
-    const val APP_GROUP_ID = "test_application"
+    private fun initializeKafka(): KafkaContainer {
+        val network: Network = Network.newNetwork()
+        val kafka = KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.4.0")).withKraft()
+        kafka.withNetwork(network).start()
+        return kafka
+    }
+
+    fun createTopics(topics:List<String>) {
+        val newTopics = topics.map { NewTopic(it, 1, 1) }
+        val adminClient = AdminClient.create(mapOf(BOOTSTRAP_SERVERS_CONFIG to kafkaContainer.bootstrapServers))
+        adminClient.createTopics(newTopics)
+    }
+
+    val kafkaContainer = initializeKafka()
+    val schemaRegistryContainer = SchemaRegistryContainer().withKafka(kafkaContainer)
+    private const val APP_GROUP_ID = "test_application"
 
     fun generateSampleEvents(numberOfEvents: Int, eventName: String): List<KeyValueTimestamp<String, SampleEvent>> =
         (1..numberOfEvents).map {
@@ -47,8 +66,8 @@ object Fixtures {
     fun getConsumerProperties(): Properties {
         val config = Properties()
         config[ConsumerConfig.GROUP_ID_CONFIG] = APP_GROUP_ID
-        config[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = KAFKA_BROKERS
-        config["schema.registry.url"] = SCHEMA_REGISTRY_URL
+        config[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaContainer.bootstrapServers
+        config["schema.registry.url"] = schemaRegistryContainer.schemaRegistryUrl()
         config[KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG] = true
         config[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "latest"
         config[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = "true"
@@ -59,8 +78,8 @@ object Fixtures {
 
     fun getProducerProperties(): Properties {
         val config = Properties()
-        config["bootstrap.servers"] = KAFKA_BROKERS
-        config["schema.registry.url"] = SCHEMA_REGISTRY_URL
+        config["bootstrap.servers"] = kafkaContainer.bootstrapServers
+        config["schema.registry.url"] = schemaRegistryContainer.schemaRegistryUrl()
         config["acks"] = "all"
         config[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         config[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = KafkaAvroSerializer::class.java
