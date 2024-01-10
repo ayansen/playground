@@ -13,11 +13,15 @@ data class Proxy(
     val routes: List<Route>
 ) {
 
+    enum class PROTOCOL(val value: String) {
+        HTTP("HTTP1"),
+        HTTPS("HTTPS")
+    }
+
     data class Route(
         val match: Match,
         val cluster: Cluster,
         val mutations: Mutations
-
     )
 
     data class Match(
@@ -42,7 +46,8 @@ data class Proxy(
 
     data class SocketAddress(
         val address: String,
-        val port: Int
+        val port: Int,
+        val protocol: PROTOCOL = PROTOCOL.HTTP
     )
 
     fun toProtoRoute(): io.envoyproxy.envoy.config.route.v3.RouteConfiguration {
@@ -63,6 +68,7 @@ data class Proxy(
                                     .setRoute(
                                         io.envoyproxy.envoy.config.route.v3.RouteAction.newBuilder()
                                             .setCluster(route.cluster.name)
+                                            .setPrefixRewrite(route.mutations.prefixRewrite)
                                     )
                                     .build()
                             }
@@ -72,6 +78,7 @@ data class Proxy(
             )
             .build()
     }
+
     fun toProtoEndpoints(): List<ClusterLoadAssignment> {
         return routes.map {
             ClusterLoadAssignment.newBuilder()
@@ -98,17 +105,66 @@ data class Proxy(
                 .build()
         }
     }
+
     fun toProtoClusters(): List<io.envoyproxy.envoy.config.cluster.v3.Cluster> {
         return routes.map {
-            io.envoyproxy.envoy.config.cluster.v3.Cluster.newBuilder()
+            val cluster = io.envoyproxy.envoy.config.cluster.v3.Cluster.newBuilder()
                 .setName(it.cluster.name)
                 .setConnectTimeout(
                     com.google.protobuf.Duration.newBuilder()
                         .setSeconds(it.cluster.connectTimeout.toLong())
                 )
+                .setDnsLookupFamily(io.envoyproxy.envoy.config.cluster.v3.Cluster.DnsLookupFamily.V4_ONLY)
                 .setType(io.envoyproxy.envoy.config.cluster.v3.Cluster.DiscoveryType.valueOf(it.cluster.type))
                 .setLbPolicy(io.envoyproxy.envoy.config.cluster.v3.Cluster.LbPolicy.valueOf(it.cluster.lbPolicy))
-                .build()
+                .setLoadAssignment(
+                    ClusterLoadAssignment.newBuilder()
+                        .setClusterName(it.cluster.name)
+                        .addAllEndpoints(
+                            (it.cluster.hosts.map { host ->
+                                LocalityLbEndpoints.newBuilder()
+                                    .addLbEndpoints(
+                                        LbEndpoint.newBuilder()
+                                            .setEndpoint(
+                                                Endpoint.newBuilder()
+                                                    .setAddress(
+                                                        Address.newBuilder()
+                                                            .setSocketAddress(
+                                                                io.envoyproxy.envoy.config.core.v3.SocketAddress.newBuilder()
+                                                                    .setAddress(host.socketAddress.address)
+                                                                    .setPortValue(host.socketAddress.port)
+                                                            )
+                                                    )
+                                            )
+                                    ).build()
+                            })
+                        )
+                        .build()
+                )
+            if (it.cluster.hosts.first().socketAddress.protocol == PROTOCOL.HTTPS) {
+                cluster.setTransportSocket(
+                    io.envoyproxy.envoy.config.core.v3.TransportSocket.newBuilder()
+                        .setName("envoy.transport_sockets.tls")
+                        .setTypedConfig(
+                            com.google.protobuf.Any.pack(
+                                io.envoyproxy.envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext.newBuilder()
+                                    .setCommonTlsContext(
+                                        io.envoyproxy.envoy.extensions.transport_sockets.tls.v3.CommonTlsContext.newBuilder()
+                                            .setTlsParams(
+                                                io.envoyproxy.envoy.extensions.transport_sockets.tls.v3.TlsParameters.newBuilder()
+                                                    .setTlsMinimumProtocolVersion(io.envoyproxy.envoy.extensions.transport_sockets.tls.v3.TlsParameters.TlsProtocol.TLS_AUTO)
+                                                    .build()
+
+                                            )
+                                            .build()
+                                    )
+                                    .setSni(it.cluster.hosts.first().socketAddress.address)
+                                    .build()
+                            )
+                        )
+                )
+            }
+            cluster.build()
         }
     }
 }

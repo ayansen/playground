@@ -1,4 +1,4 @@
-package ayansen.playground.envoy
+package ayansen.playground.envoy.entity
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 

@@ -9,6 +9,7 @@ import io.envoyproxy.controlplane.cache.v3.SimpleCache
 
 import kotlinx.coroutines.*
 import org.slf4j.LoggerFactory
+import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.Path
 import java.nio.file.StandardWatchEventKinds
@@ -39,7 +40,7 @@ class FileProxyProvider(
 
     override fun getProxies(): List<Proxy> {
         return Path.of(proxyFolderPath).toFile().listFiles()?.map { file ->
-            parseYamlFile(file.toPath())
+            parseYamlFile(file)
         } ?: emptyList()
     }
 
@@ -51,8 +52,8 @@ class FileProxyProvider(
         throw NotImplementedError("proxy deletion can be done by deleting the file from the folder")
     }
 
-    private inline fun <reified T> parseYamlFile(path: Path): T {
-        return mapper.readValue(path.toFile(), T::class.java)
+    private inline fun <reified T> parseYamlFile(file: File): T {
+        return mapper.readValue(file, T::class.java)
     }
 
     private fun watchForChanges(path: Path) {

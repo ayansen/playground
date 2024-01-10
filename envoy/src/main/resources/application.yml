@@ -44,8 +44,9 @@ config-provider:
   file:
     path: "./configs"
 
-listeners:
-  - name: http
-    socketAddress:
-      address: 0.0.0.0
-      port: 10000
+envoy-listeners:
+  listeners:
+    - name: http
+      socketAddress:
+        address: 0.0.0.0
+        port: 10000
