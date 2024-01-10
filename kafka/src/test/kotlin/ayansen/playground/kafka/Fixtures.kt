@@ -38,20 +38,21 @@ object Fixtures {
 
     private fun initializeKafka(): KafkaContainer {
         val network: Network = Network.newNetwork()
-        val kafka = KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.4.0")).withKraft()
-        kafka.withNetwork(network).start()
+        val kafka = KafkaContainer(DockerImageName.parse(KAFKA_FULL_IMAGE_NAME))
+            .withKraft().withNetwork(network)
+        kafka.start()
         return kafka
     }
 
-    fun createTopics(topics:List<String>) {
-        val newTopics = topics.map { NewTopic(it, 1, 1) }
+    fun createTopics(topics: List<NewTopic>) {
         val adminClient = AdminClient.create(mapOf(BOOTSTRAP_SERVERS_CONFIG to kafkaContainer.bootstrapServers))
-        adminClient.createTopics(newTopics)
+        adminClient.createTopics(topics)
     }
 
     val kafkaContainer = initializeKafka()
     val schemaRegistryContainer = SchemaRegistryContainer().withKafka(kafkaContainer)
     private const val APP_GROUP_ID = "test_application"
+    private const val KAFKA_FULL_IMAGE_NAME = "confluentinc/cp-kafka:7.4.0"
 
     fun generateSampleEvents(numberOfEvents: Int, eventName: String): List<KeyValueTimestamp<String, SampleEvent>> =
         (1..numberOfEvents).map {
@@ -67,7 +68,7 @@ object Fixtures {
         val config = Properties()
         config[ConsumerConfig.GROUP_ID_CONFIG] = APP_GROUP_ID
         config[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = kafkaContainer.bootstrapServers
-        config["schema.registry.url"] = schemaRegistryContainer.schemaRegistryUrl()
+        config["schema.registry.url"] = schemaRegistryContainer.schemaRegistryUrl
         config[KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG] = true
         config[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "latest"
         config[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = "true"
@@ -79,7 +80,7 @@ object Fixtures {
     fun getProducerProperties(): Properties {
         val config = Properties()
         config["bootstrap.servers"] = kafkaContainer.bootstrapServers
-        config["schema.registry.url"] = schemaRegistryContainer.schemaRegistryUrl()
+        config["schema.registry.url"] = schemaRegistryContainer.schemaRegistryUrl
         config["acks"] = "all"
         config[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         config[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = KafkaAvroSerializer::class.java

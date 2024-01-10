@@ -15,23 +15,21 @@ class SchemaRegistryContainer :
         const val CONFLUENT_PLATFORM_VERSION = "5.5.1"
     }
 
+    lateinit var schemaRegistryUrl: String
+
     init {
         waitingFor(Wait.forHttp("/subjects").forStatusCode(200))
         withExposedPorts(SCHEMA_REGISTRY_PORT)
     }
 
     fun withKafka(kafka: KafkaContainer): SchemaRegistryContainer {
-        return withKafka(kafka.network, kafka.networkAliases[0] + ":9092")
-    }
-
-    fun withKafka(network: Network?, bootstrapServers: String): SchemaRegistryContainer {
-        withNetwork(network)
+        withNetwork(kafka.network)
         withEnv("SCHEMA_REGISTRY_HOST_NAME", "schema-registry")
         withEnv("SCHEMA_REGISTRY_LISTENERS", "http://0.0.0.0:$SCHEMA_REGISTRY_PORT")
-        withEnv("SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS", "PLAINTEXT://$bootstrapServers")
+        withEnv("SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS", "PLAINTEXT://${kafka.networkAliases[0]}:9092")
         start()
+        schemaRegistryUrl = "http://$host:${getMappedPort(SCHEMA_REGISTRY_PORT)}"
         return self()
     }
 
-    fun schemaRegistryUrl(): String = "http://$host:${getMappedPort(SCHEMA_REGISTRY_PORT)}"
 }

@@ -166,7 +166,7 @@ object IntegrationTestUtils {
     private fun <K, V> getTestProducer(): KafkaProducer<K, V> {
         val config = Properties()
         config["bootstrap.servers"] = Fixtures.kafkaContainer.bootstrapServers
-        config["schema.registry.url"] = Fixtures.schemaRegistryContainer.schemaRegistryUrl()
+        config["schema.registry.url"] = Fixtures.schemaRegistryContainer.schemaRegistryUrl
         config["acks"] = "all"
         config[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         config[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = KafkaAvroSerializer::class.java
@@ -178,7 +178,7 @@ object IntegrationTestUtils {
         config[ConsumerConfig.CLIENT_ID_CONFIG] = "integration-test-consumer-${(0..100).random()}"
         config[ConsumerConfig.GROUP_ID_CONFIG] = "integration-test-consumers-${(0..100).random()}"
         config[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = Fixtures.kafkaContainer.bootstrapServers
-        config["schema.registry.url"] = Fixtures.schemaRegistryContainer.schemaRegistryUrl()
+        config["schema.registry.url"] = Fixtures.schemaRegistryContainer.schemaRegistryUrl
         config[KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG] = true
         config[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "latest"
         config[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = "true"
