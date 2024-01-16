@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 
 
 /**
- * TODOThe DiscoveryServer class is responsible for starting a gRPC server and initializing the necessary services for Envoy proxy configuration discovery.
+ * The DiscoveryServer class is responsible for starting a gRPC server and initializing the necessary services for Envoy proxy configuration discovery.
 Example Usage
 val simpleCache = SimpleCache<Any>()
 val discoveryServer = DiscoveryServer(simpleCache)

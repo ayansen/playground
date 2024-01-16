@@ -9,6 +9,9 @@ import io.envoyproxy.controlplane.cache.v3.SimpleCache
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
+/**
+ * This class is responsible for configuring the spring beans
+ */
 @Configuration
 open class SpringConfiguration {
     @Bean
