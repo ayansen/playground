@@ -15,6 +15,12 @@ import java.nio.file.Path
 import java.nio.file.StandardWatchEventKinds
 import java.nio.file.WatchKey
 
+/**
+ * This class is responsible for providing the proxy configuration from a folder of yaml files
+ * @property proxyFolderPath
+ * @property simpleCache
+ * @property listenersConfiguration
+ */
 class FileProxyProvider(
     private val proxyFolderPath: String,
     simpleCache: SimpleCache<Any>,

@@ -10,7 +10,6 @@ object Fixtures {
     val mapper: ObjectMapper = ObjectMapper(YAMLFactory()).apply {
         registerModule(KotlinModule.Builder().build())
     }
-
     inline fun <reified T> parseYamlFile(file: File): T {
         return mapper.readValue(file, T::class.java)
     }

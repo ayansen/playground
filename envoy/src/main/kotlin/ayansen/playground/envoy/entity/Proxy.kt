@@ -6,7 +6,10 @@ import io.envoyproxy.envoy.config.endpoint.v3.Endpoint
 import io.envoyproxy.envoy.config.endpoint.v3.LbEndpoint
 import io.envoyproxy.envoy.config.endpoint.v3.LocalityLbEndpoints
 
-
+/**
+ * This class represents a proxy configuration. It contains nested data classes for defining routes, clusters, hosts, and socket addresses.
+ * The class provides methods for converting the proxy configuration to protobuf messages for use with Envoy.
+ */
 data class Proxy(
     val name: String,
     val domains: List<String>,
